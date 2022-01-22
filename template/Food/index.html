@@ -1,0 +1,100 @@
+{% load static %}
+<html lang="en">
+<head>
+    <title>Cooking without Waste</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="text-gray-400 bg-gray-900 body-font">
+      <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+        <a class="flex title-font font-medium items-center text-white mb-4 md:mb-0">
+          <img src='https://kbimages1-a.akamaihd.net/15a43c32-70c2-4d79-9776-fdeb1ffa5181/1200/1200/False/ratatouille-4.jpg' style='border-radius: 50%; width: 40px'>
+          <span class="ml-3 text-xl" style="font-family: 'Mochiy Pop P One', sans-serif;">Cook without Waste!</span>
+        </a>
+  
+      </div>
+    </header>
+    <section class="text-gray-400 bg-gray-900 body-font content-center" style="position: relative; background: url({% static 'imgs/r11.jpg'%}); font-family: 'Mochiy Pop P One', sans-serif; background-repeat: no-repeat;">
+        <form method="post" action="/">
+            {% csrf_token %}
+            <div class="container px-5 py-24 mx-auto" >
+              <div class="flex flex-col text-center w-full mb-12">
+                <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-white" style="color: rgb(255, 255, 255); text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Cook without Waste!</h1>
+                <p class="lg:w-2/3 mx-auto leading-relaxed text-base" style="color: rgb(255, 255, 255); font-size: 1.2rem; text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.767), 1px -1px 0 rgba(0, 0, 0, 0.0rgba(0, 0, 0, 0.185) -1px 1px 0 rgba(0, 0, 0, 0.376), 1px 1px 0 rgba(0, 0, 0, 0.376);">Benefit from the left-over ingredients and create a mouth-watering dish while not wasting food</p>
+              </div>
+              <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:px-0 items-end sm:space-x-4 sm:space-y-0 space-y-4">
+                <div class="relative sm:mb-0 flex-grow w-full">
+                  <label for="query" class="leading-7 text-sm text-gray-400" style="color: white;"><h2>Ingredients</h2></label>
+                  <input type="text" id="query" name="query" class="w-full bg-gray-800 bg-opacity-40 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 focus:bg-transparent text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" placeholder="chicken, pineapple, eggplant...">
+                </div>
+              </div>
+              <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:px-0 items-end sm:space-x-4 sm:space-y-0 space-y-4" style="padding: 20px; padding-left: 22%;">
+                <button class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" style="background: bg-indigo-500">Feed me the Recipes!</button>
+              </div>
+            </div>
+        </form>
+
+    {% if recipe_list is not None %}
+        {% for i in recipe_list %}
+            <section class="text-gray-400 bg-gray-900 body-font overflow-hidden">
+              <div class="container px-5 py-24 mx-auto">
+                <div class="lg:w-4/5 mx-auto flex flex-wrap">
+                  <img alt="ecommerce" class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded" src="{{ i.image }}">
+                  <div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
+                    <h2 class="text-sm title-font text-gray-500 tracking-widest">{{ i.source }}</h2>
+                    <h1 class="text-white text-3xl title-font font-medium mb-1">{{ i.name }}</h1>
+                    <div class="flex mb-4">
+                        <span class="ml-3">
+                            Diet: {% for j in i.diet %}{{ j }}{% endfor %},
+                            Meal: {% for j in i.meal %}{{ j }}{% endfor %},
+                            Dish: {% for j in i.dish  %}{{ j }}{% endfor %}
+                        </span>
+                      </span>
+                      <span class="flex ml-3 pl-3 py-2 border-l-2 border-gray-800 text-gray-500 space-x-2">
+                        <a href="{{ i.shareAs }}">
+                          <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                            <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
+                          </svg>
+                        </a>
+                      </span>
+                    </div>
+                    <p class="leading-relaxed">Ingredients:
+                        <ul>
+                            <li></li>
+                            {% for j in i.ingredients %}
+                                <li>|       {{ j }}</li>
+                            {% endfor %}
+                        </ul>
+                    </p>
+                    <div class="flex">
+                      <span class="title-font font-medium text-1xl text-white" style="padding: 10px;"><h3>{% if i.caution %}Caution: {% for j in i.caution %}{{ j }}{% endfor %}{% else %}Nothing to worry about ;){% endif %}</h3></span>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                        <a href="{{ i.url }}"><button class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Make it!</button></a>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+        {% endfor %}
+    {% else %}
+        <h1>Nothing here</h1>
+    {% endif %}
+    </section>
+
+    <footer class="text-gray-400 bg-gray-900 body-font">
+      <div class="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
+        <a class="flex title-font font-medium items-center md:justify-start justify-center text-white">
+          <img src='https://kbimages1-a.akamaihd.net/15a43c32-70c2-4d79-9776-fdeb1ffa5181/1200/1200/False/ratatouille-4.jpg' style='border-radius: 50%; width: 40px'>
+          <span class="ml-3 text-xl">Cook without Waste!</span>
+        </a>
+        <p class="text-sm text-gray-400 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-800 sm:py-2 sm:mt-0 mt-4">© 2022 Cook without Waste! —
+          <a href="https://twitter.com/knyttneve" class="text-gray-500 ml-1" target="_blank" rel="noopener noreferrer">@cactus, @LeoDiTechTips, @Chara98</a>
+        </p>
+      </div>
+    </footer>
+</body>
+</html>
